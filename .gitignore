@@ -1,0 +1,15 @@
+# secrets
+.env
+.env.*
+
+# dependencies, caches and generated output
+node_modules/
+code/.cache/
+code/.cache-*/
+code/evaluation/ingest_report.json
+code/evaluation/final_traces.jsonl
+output.csv
+
+# the organizers' dataset is not redistributed
+dataset/
+data/

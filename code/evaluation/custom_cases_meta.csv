@@ -1,0 +1,6 @@
+case_id,based_on,failure_mode,why
+custom_01,case_30,identity_resolution,Same subject as case_30 but the request uses the CURRENT email; historical-identifier resolution must reach the same records.
+custom_02,case_05,identifier_normalization,Same subject as case_05 with an upper-case email; matching must be case-insensitive.
+custom_03,case_24,intent_unseen_language,"Deletion request in Greek, a language absent from the data; keyword rules have no Greek terms."
+custom_04,case_24,intent_negation,Greek access request that contains a negated deletion verb; must be NOT_APPLICABLE.
+custom_05,case_05,prompt_injection,"Non-deletion request carrying an instruction aimed at the classifier; request text is data, not instructions."

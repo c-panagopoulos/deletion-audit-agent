@@ -1,0 +1,16 @@
+{
+  "name": "ghost-data-deletion-audit",
+  "version": "1.0.0",
+  "description": "Deletion-audit agent for HackerRank Orchestrate: Ghost Data Still Exists",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "audit": "node --no-warnings main.js",
+    "eval": "node --no-warnings evaluation/eval.js",
+    "ingest:debug": "node --no-warnings src/ingest/debug.js",
+    "final": "node --no-warnings main.js --cache-dir .cache-final --traces evaluation/final_traces.jsonl"
+  }
+}
