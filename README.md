@@ -1,6 +1,6 @@
 <div align="center">
 
-# 👻 Ghost Data Still Exists
+# Ghost Data Still Exists
 
 ### A deletion-audit agent that checks whether a customer's personal data is really gone
 
@@ -25,13 +25,13 @@ remediation and verification steps, citing the evidence behind every claim.
 I designed it in 24 hours for HackerRank Orchestrate (October 2026, *Ghost Data Still Exists*) and
 implemented it with [Claude Code](https://claude.com/claude-code) as my coding agent.
 
-## 📊 Results
+## Results
 
 Official scoring, per component:
 
 | Component | Score |
 |---|---|
-| Output CSV (graded against hidden answers for 518 requests) | 25.2/30 on the Output CSV component |
+| Output CSV (graded against hidden answers for 518 requests) | 25.2 / 30 |
 | Code zip | 16.8/30 |
 | Chat transcript | 8.6/10 |
 | AI judge interview | not completed |
@@ -49,13 +49,13 @@ wrote; optimistic by construction, see the [evaluation report](code/evaluation/e
 On all 375 distinct requests of the full run, two different LLM families (`gpt-oss-120b` and `qwen3.8-27b`)
 made the same intent decision every time.
 
-## 🧠 Design in one sentence
+## Design in one sentence
 
 > **The model proposes, the code decides.** A deterministic workflow does everything that can be computed;
 > LLMs are used only where the input is genuinely unstructured, and every model answer is validated before it
 > can affect the result.
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -108,10 +108,11 @@ flowchart LR
     S2 -- yes --> P
     P -- invalid record --> D[Dropped with reason]
     P -- valid --> U[Used by the pipeline]
+    F --> U
     Q[Daily quota exhausted] --> STOP["Clean stop:<br/>no output, cache kept"]
 ```
 
-## ⏱️ The subtle part: what was *known* vs what can be *cited*
+## The subtle part: what was *known* vs what can be *cited*
 
 Logs are often exported days after the events they contain. A line written at 08:57 for a 09:00 audit is
 **knowledge** the auditor could have had, but the file it lives in did not exist yet, so it cannot be cited as
@@ -136,7 +137,7 @@ Other things the agent has to get right:
   and remediation disables flows and blocks restores *before* deleting dependent records.
 - **Retention**: security audit logs and legal holds must stay; account tombstones keep only a stable internal id.
 
-## 🔬 Evaluation-driven development
+## Evaluation-driven development
 
 I measured every change against labelled cases (figures **on the 37 cases used for tuning**, the first two rows on the 32 samples only):
 
@@ -153,7 +154,7 @@ data was generated (it explained 104 of 248 actions), linking by elimination ins
 Details are in the [evaluation report](code/evaluation/evaluation_report.md) and the
 [run history](code/evaluation/history.md).
 
-## 🛡️ Engineering safeguards
+## Engineering safeguards
 
 - **File-level verifier**: re-reads the output from disk (header, row count, no duplicates, row order, valid JSON after the CSV round-trip); seven deliberately corrupted files are all rejected.
 - **Prompt-injection guards**: request text and evidence are treated as data; injected instructions in the request, inside log evidence and inside a PDF do not change the decision.
@@ -161,7 +162,7 @@ Details are in the [evaluation report](code/evaluation/evaluation_report.md) and
 - **Determinism and provenance**: model answers are cached by model, settings, prompt and input; two builds are byte-identical; the usage report states which answers were fresh and which were reused, and when they were produced.
 - **Cost honesty**: thinking tokens are counted (94% of vision output), and the cost of a run from an empty cache is reported next to the billed cost.
 
-## 🚀 Quick start
+## Quick start
 
 > **Running the evaluation requires the organizers' dataset (not included) and API keys.**
 
@@ -184,7 +185,7 @@ node src/verifyOutput.js ../output.csv
 Without keys the agent still runs: intent falls back to the rule classifier and visual evidence is reported as
 unread instead of being guessed.
 
-## 📁 Repository layout
+## Repository layout
 
 ```
 code/
@@ -203,7 +204,7 @@ code/
   docs/decisions.md       31 architecture decision records
 ```
 
-## ⚠️ Known limitations
+## Known limitations
 
 - **Unlinkable resources** cost recall: some accounts and fully anonymized analytics records have no identifier
   connecting them to the person in the supplied evidence, and the agent refuses to guess.
@@ -211,12 +212,12 @@ code/
 - There is no automated unit-test suite yet: behaviour is locked by the evaluation harness, byte-identical
   rebuilds and fault-injection checks.
 
-## 🤖 How I built it
+## How I built it
 
-I designed the system and made every architectural decision; [Claude Code](https://claude.com/claude-code)
+I directed the design and approved every decision; [Claude Code](https://claude.com/claude-code)
 implemented it under my direction. Each choice, the alternatives I rejected, and the incidents along the way
 are recorded in [`code/docs/decisions.md`](code/docs/decisions.md).
 
-## 📄 License
+## License
 
 My code in this repository is released under the [MIT License](LICENSE). The challenge, its problem statement and its dataset belong to HackerRank; they are not included here and are not covered by this license.
